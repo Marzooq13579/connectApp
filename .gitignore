@@ -4,6 +4,9 @@
 # Ignore environment files in both frontend and backend
 **/.env
 
+# Ignore dist folder
+**/dist/
+
 # Ignore build output and logs in frontend
 frontend/build/
 frontend/logs/
