@@ -1,4 +1,4 @@
-# Exclusive Social Media App
+# Exclusive Social Media App [In Progress]
 
 Welcome to the Exclusive Social Media App – a unique social platform with features tailored for exclusive networking experiences.
 
