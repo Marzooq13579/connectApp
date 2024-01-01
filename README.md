@@ -49,32 +49,32 @@ Before you begin, ensure you have the following installed:
 
 ### installation
 
-# Clone the repository and install dependencies:
+### Clone the repository and install dependencies:
 git clone https://github.com/yourusername/exclusive-social-media-app.git
 
-# Install backend dependencies and set up environment variables:
+### Install backend dependencies and set up environment variables:
 cd exclusive-social-media-app/backend
 npm install
 
-# Install frontend dependencies:
+### Install frontend dependencies:
 cd ../frontend
 npm install
 
-# Configure environment variables:
-# Create a .env file in the backend directory and configure it.
-# Configure Pusher credentials and WebRTC settings.
+- Configure environment variables:
+- Create a .env file in the backend directory and configure it.
+- Configure Pusher credentials and WebRTC settings.
 
 
-# Run the application:
-# Start the backend server
+### Run the application:
+### Start the backend server
 cd backend
 npm start
 
-# Start the frontend development server
+### Start the frontend development server
 cd ../frontend
 npm start
 
-# Technologies
+## Technologies
 - MongoDB
 - Express.js
 - React
