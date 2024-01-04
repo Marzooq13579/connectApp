@@ -6,6 +6,8 @@ const prisma = new PrismaClient();
 
 import { UserResponse } from "../types";
 
+import { generateAccessToken, generateRefreshToken } from "../utils";
+import { error } from "console";
 
 //Register Controller
 export const register = async (req: Request, res: Response) => {
@@ -47,9 +49,39 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-
-
 //Login Controller
-export const login = async(req:Request,res:Response) =>{
-    
-}
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: "Invalid Credentials!" });
+    }
+
+    //GenerateAccessToken
+    const accessToken = generateAccessToken(user.id, user.role);
+
+    //GenerateRefreshToken
+    const refreshToken = generateRefreshToken(user.id, user.role);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+    });
+
+    res.json({ accessToken });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
