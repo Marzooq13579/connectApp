@@ -5,3 +5,9 @@ export interface UserResponse {
   name: string | null;
   role: Role;
 }
+
+
+export interface UserPayload {
+  id: string;
+  role: string;
+}

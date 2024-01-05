@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 import { UserResponse } from "../types";
 
 import { generateAccessToken, generateRefreshToken } from "../utils";
-import { error } from "console";
+
 
 //Register Controller
 export const register = async (req: Request, res: Response) => {
@@ -49,6 +49,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
+
 //Login Controller
 export const login = async (req: Request, res: Response) => {
   try {
@@ -85,3 +86,15 @@ export const login = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+//Logout Controller
+export const logout =async (req:Request,res:Response) => {
+  try{
+
+    
+
+  }catch(err){
+
+  }
+}
