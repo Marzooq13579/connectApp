@@ -1,10 +1,10 @@
 import express from "express";
 import { register, login, logout, refreshToken } from "../controllers";
-import { authenticateJWT, authenticateRefreshToken } from "../middlewares";
+import { authenticateJWT, authenticateRefreshToken, authorizeRole } from "../middlewares";
 
 const router = express.Router();
 
-router.post("/register", register);
+router.post("/register",register);
 router.post("/login", login);
 router.post("/refreshToken", authenticateRefreshToken, refreshToken);
 router.post("/logout", authenticateJWT, logout);

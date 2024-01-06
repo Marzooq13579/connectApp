@@ -61,3 +61,15 @@ export const authenticateRefreshToken = (
     }
   );
 };
+
+export const authorizeRole = (requiredRole:string) => {
+  return (req:Request,res:Response,next:NextFunction) => {
+    const user = req.user;
+
+    if(!user || user.role!== requiredRole){
+      return res.status(403).json({error:"Forbidden - Insufficient permissions"});
+    }
+
+    next();
+  }
+}

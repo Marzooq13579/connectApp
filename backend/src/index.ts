@@ -5,6 +5,7 @@ import { PrismaClient, User, Role } from "@prisma/client";
 const prisma = new PrismaClient();
 
 import { authRoutes } from "./routes";
+import { adminRoutes } from "./routes/adminRoute";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/admin",adminRoutes);
 
 app.listen(port, () => {
   console.log(`server is listening at port ${port}`);
