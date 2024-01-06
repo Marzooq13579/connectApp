@@ -8,7 +8,6 @@ import { UserResponse } from "../types";
 
 import { generateAccessToken, generateRefreshToken } from "../utils";
 
-
 //Register Controller
 export const register = async (req: Request, res: Response) => {
   try {
@@ -49,7 +48,6 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-
 //Login Controller
 export const login = async (req: Request, res: Response) => {
   try {
@@ -78,6 +76,7 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+      path: "/",
     });
 
     res.json({ accessToken });
@@ -87,14 +86,27 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-
 //Logout Controller
-export const logout =async (req:Request,res:Response) => {
-  try{
+export const logout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("refreshToken", { path: "/" });
 
-    
+    const userId = req.user?.id;
 
-  }catch(err){
+    if (userId) {
+      await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          refreshToken: null,
+        },
+      });
+    }
 
+    res.status(200).json({ message: "Logout successful" });
+  } catch (err) {
+    console.error("Error during logout:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};

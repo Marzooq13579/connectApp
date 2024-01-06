@@ -108,5 +108,6 @@
   },
   "include":[
     "src/**/*.ts"
-  ]
+  ],
+  "files": ["src/types/custom.d.ts"]
 }
