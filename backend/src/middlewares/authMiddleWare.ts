@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-import {UserPayload} from "../types";
+import { UserPayload } from "../types";
 
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as string;
+const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET as string;
 
 export const authenticateJWT = (
   req: Request,
@@ -16,7 +17,7 @@ export const authenticateJWT = (
   }
 
   jwt.verify(token, accessTokenSecret, (err, decodedToken) => {
-    if (err) {
+    if (err || typeof decodedToken === "string") {
       return res.status(403).json({ error: "Forbidden - Invalid Token" });
     }
 
@@ -26,4 +27,37 @@ export const authenticateJWT = (
 
     next();
   });
+};
+
+export const authenticateRefreshToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized! Missing Refresh Token" });
+  }
+
+  jwt.verify(
+    refreshToken,
+    refreshTokenSecret,
+    (
+      err: jwt.VerifyErrors | null,
+      decodedToken: string | jwt.JwtPayload | undefined
+    ) => {
+      if (err || typeof decodedToken === "string") {
+        return res.status(403).json({ error: "Forbidden - Invalid Token" });
+      }
+
+      const userPayload = decodedToken as UserPayload;
+
+      req.user = userPayload;
+
+      next();
+    }
+  );
 };
