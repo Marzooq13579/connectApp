@@ -50,7 +50,7 @@ export const authenticateRefreshToken = (
       decodedToken: string | jwt.JwtPayload | undefined
     ) => {
       if (err || typeof decodedToken === "string") {
-        return res.status(403).json({ error: "Forbidden - Invalid Token" });
+        return res.status(403).json({ error: "Forbidden - Invalid Token. Please Login Again!" });
       }
 
       const userPayload = decodedToken as UserPayload;

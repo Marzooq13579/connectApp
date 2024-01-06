@@ -86,7 +86,19 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+//RefreshToken Controller to generate new AccessToken
+export const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const user = req.user!;
 
+    const newAccessToken = generateAccessToken(user.id, user.role);
+
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    console.error("Error during token refresh:", err);
+    res.status(500).json({ error: "Internal Server Error, Please Login Again!" });
+  }
+};
 
 //Logout Controller
 export const logout = async (req: Request, res: Response) => {
