@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({
+    const user: User | null = await prisma.user.findUnique({
       where: { email },
     });
 
@@ -79,7 +79,13 @@ export const login = async (req: Request, res: Response) => {
       path: "/",
     });
 
-    res.json({ accessToken });
+    const userDetails = {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    res.json({ ...userDetails, accessToken });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -96,7 +102,9 @@ export const refreshToken = async (req: Request, res: Response) => {
     res.json({ accessToken: newAccessToken });
   } catch (err) {
     console.error("Error during token refresh:", err);
-    res.status(500).json({ error: "Internal Server Error, Please Login Again!" });
+    res
+      .status(500)
+      .json({ error: "Internal Server Error, Please Login Again!" });
   }
 };
 
