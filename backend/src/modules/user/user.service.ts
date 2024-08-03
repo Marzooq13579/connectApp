@@ -19,8 +19,15 @@ export class UserService {
     return savedUserObject;
   }
 
-  async findUserByEmail(email: string) {
-    const query = this.userModel.where({ email });
-    return await query.findOne();
+  async findUserByEmail(email: string): Promise<User | null> {
+    if (!this.isValidEmail(email)) {
+      throw new Error('invalid_email_format');
+    }
+    return await this.userModel.findOne({ email: { $eq: email } }).exec();
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 }
