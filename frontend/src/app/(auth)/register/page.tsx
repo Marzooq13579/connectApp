@@ -4,7 +4,7 @@ import {AuthModal} from "@/components/AuthModal";
 const page = () => {
   return (
     <div className="h-screen w-screen flex items-center justify-center">
-      <AuthModal />
+      <AuthModal action={"register"}/>
     </div>
   );
 };
