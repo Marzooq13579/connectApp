@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import {
@@ -9,17 +9,25 @@ import {
 } from "@/redux/slice/authApiSlice";
 import { setCredentials } from "@/redux/slice/authSlice";
 
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import Cookies from "js-cookie";
 
-export const AuthModal = ({ action }) => {
+interface AuthModalInterface {
+  action: string;
+}
+
+interface jwtDecodeToken extends JwtPayload {
+  username: string;
+}
+
+export const AuthModal: React.FC<AuthModalInterface> = ({ action }) => {
   const router = useRouter();
   const pathName = usePathname();
 
   const [register, setRegister] = useState(action == "register");
 
   const [registerUser, { isLoading }] = useRegisterUserMutation();
-  const [loginUser, { isLoadingLogin }] = useLoginUserMutation();
+  const [loginUser, {}] = useLoginUserMutation();
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -35,7 +43,7 @@ export const AuthModal = ({ action }) => {
     router.push(redirectTo);
   }
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
 
     const { name, value } = e.target;
@@ -72,7 +80,7 @@ export const AuthModal = ({ action }) => {
         Cookies.set("token", jwtToken, { expires: 7 });
 
         // Decode token to extract user info (optional)
-        const decoded = jwtDecode(jwtToken);
+        const decoded = jwtDecode<jwtDecodeToken>(jwtToken);
 
         console.log("decode value is", decoded);
 

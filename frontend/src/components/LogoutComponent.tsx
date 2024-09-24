@@ -9,7 +9,7 @@ const LogoutComponent = () => {
 
   function handleLogout() {
     Cookies.remove("token");
-    toast.info("Looged Out!");
+    toast.error("Logged Out!");
     router.push("/login");
   }
 
